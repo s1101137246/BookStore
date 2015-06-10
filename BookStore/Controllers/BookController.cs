@@ -115,6 +115,16 @@ namespace BookStore.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST:  data 
+        public JsonResult GetBook()
+        {
+            var books = db.Book.ToList();
+            return Json(books, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

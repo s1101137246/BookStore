@@ -4,66 +4,209 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<html>
+<head>
+    <base href="http://demos.telerik.com/kendo-ui/grid/filter-row">
+    <style>
+        html {
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.429/styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.429/styles/kendo.material.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.429/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.429/styles/kendo.dataviz.material.min.css" />
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.author)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.press)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.summary)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sort)
-        </th>
-        <th></th>
-    </tr>
+    <script src="http://cdn.kendostatic.com/2015.1.429/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.429/js/kendo.all.min.js"></script>
+</head>
+<body>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.author)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.press)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.summary)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sort)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    <h2>Index</h2>
 
-</table>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
+    @section scripts
+{
+        <script type="text/javascript">
+            $(function () {
+                //資料來源物件改用Ajax
+                var dataSrc = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            type: "POST",
+                            url: "GetBook.cshtml",
+                            dataType: "json"
+                        }
+                    },
+                    pageSize: 20,
+                    serverPaging: true,
+                    serverSorting: true
+                });
+
+                $("#gridData").kendoGrid({
+                    dataSource: dataSrc,
+                    columns: [
+                        { field: "id", title: "id" },
+                    ], //columns的field對應到customer資料表的欄位
+                    sortable: true,
+                    pageable: true,
+                    filterable: true,
+                    width: '800'
+                });
+            });
+        </script>
+    }
+    <div id="gridData"></div>
+
+
+
+
+    @*<div id="example">
+            <div id="grid"></div>
+            <script>
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: {
+                                    type: "POST",
+                                    url: "/Book/GetBook",
+                                    dataType: "json"
+                                }
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        id: { type: "int" },
+                                        name: { type: "string" },
+                                        author: { type: "string" },
+                                        press: { type: "string" },
+                                        date: { type: "string" },
+                                        price: { type: "int" },
+                                        summary: { type: "string" },
+                                        sort: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                        },
+                        height: 550,
+                        filterable: {
+                            mode: "row"
+                        },
+                        pageable: true,
+                        columns:
+                        [{
+                            field: "id",
+                            width: 225,
+                            filterable: {
+                                cell: {
+                                    showOperators: false
+                                }
+                            }
+                        },
+                        {
+                            field: "name",
+                            width: 500,
+                            title: "Book name",
+                            filterable: {
+                                cell: {
+                                    operator: "contains"
+                                }
+                            }
+                        }, {
+                            field: "author",
+                            width: 255,
+                            filterable: {
+                                cell: {
+                                    operator: "gte"
+                                }
+                            }
+                        }, {
+                            field: "press",
+                            title: "Press",
+                            filterable: {
+                                cell: {
+                                    operator: "contains"
+                                }
+                            }
+                        }]
+                    });
+                });
+
+                console.log($("#grid"));
+            </script>
+        </div>*@
+
+
+    @*<table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.press)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.summary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sort)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.author)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.press)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.summary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sort)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    </td>
+                </tr>
+            }
+
+        </table>*@
+
+
+</body>
+</html>
